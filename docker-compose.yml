@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # MongoDB Veritabanı
+  mongodb:
+    image: mongo:6.0
+    container_name: restoran_qr_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: restoran-qr
+    volumes:
+      - mongo_data:/data/db
+
+  # NestJS Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: restoran_qr_backend
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/restoran-qr
+      - JWT_SECRET=restoran-qr-secret-key-change-in-prod-2026
+      - JWT_EXPIRES_IN=7d
+      - FRONTEND_URL=http://localhost:4200
+      - NEXTJS_URL=http://localhost:3000
+      - APP_URL=http://localhost:3001
+      - MENU_BASE_URL=http://localhost:3000/m
+    depends_on:
+      - mongodb
+
+  # Next.js Müşteri Menüsü & Landing
+  nextjs:
+    build:
+      context: ./frontend-nextjs
+      dockerfile: Dockerfile
+    container_name: restoran_qr_nextjs
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+
+volumes:
+  mongo_data:

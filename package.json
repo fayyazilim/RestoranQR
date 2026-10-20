@@ -1,0 +1,21 @@
+{
+  "name": "restoran-qr-monorepo",
+  "version": "1.0.0",
+  "description": "Multi-Tenant Dijital QR Menü Platformu",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n \"backend,nextjs,angular\" -c \"blue.bold,cyan.bold,magenta.bold\" \"npm run start:dev --prefix backend\" \"npm run dev --prefix frontend-nextjs\" \"npm start --prefix frontend-angular\"",
+    "dev:prod": "concurrently -k -n \"backend,nextjs,angular\" -c \"blue.bold,cyan.bold,magenta.bold\" \"npm run start:prod --prefix backend\" \"npm start --prefix frontend-nextjs\" \"npm start --prefix frontend-angular\"",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend-nextjs && npm run build --prefix frontend-angular",
+    "build:backend": "npm run build --prefix backend",
+    "build:nextjs": "npm run build --prefix frontend-nextjs",
+    "build:angular": "npm run build --prefix frontend-angular",
+    "start:backend": "npm run start:dev --prefix backend",
+    "start:nextjs": "npm run dev --prefix frontend-nextjs",
+    "start:angular": "npm start --prefix frontend-angular",
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend-nextjs && npm install --prefix frontend-angular"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
